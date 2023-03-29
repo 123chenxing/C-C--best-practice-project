@@ -1,3 +1,7 @@
+/*
+*  ç¨‹åºåï¼šcrtsurfdata1.cpp  æœ¬ç¨‹åºç”¨äºç”Ÿæˆå…¨å›½æ°”è±¡ç«™ç‚¹è§‚æµ‹çš„åˆ†é’Ÿæ•°æ®ã€‚
+*  ä½œè€…ï¼šé™ˆå† ã€‚
+
 #include "_public.h"
 CLogFile logfile;
 int main(int argc,char *argv[]){
@@ -5,16 +9,16 @@ int main(int argc,char *argv[]){
 if(argc!=4){
 printf("Using:./crtsurfdata1 inifile outpath logfile\n");
 printf("Example:/project/idc11/bin/crtsurfdata1 /project/idc11/ini/stcode.ini /tmp/surfdata /log/idc/crtsurfdata1.log\n\n");
-printf("inifile È«¹úÆøÏóÕ¾µã²ÎÊıÎÄ¼şÃû¡£\n");
-printf("outpath È«¹úÆøÏóÕ¾µãÊı¾İÎÄ¼ş´æ·ÅµÄÄ¿Â¼¡£\n");
-printf("logfile ±¾³ÌĞòÔËĞĞµÄÈÕÖ¾ÎÄ¼şÃû¡£\n\n");
+printf("inifile å…¨å›½æ°”è±¡ç«™ç‚¹å‚æ•°æ–‡ä»¶åã€‚\n");
+printf("outpath å…¨å›½æ°”è±¡ç«™ç‚¹æ•°æ®æ–‡ä»¶å­˜æ”¾çš„ç›®å½•ã€‚\n");
+printf("logfile æœ¬ç¨‹åºè¿è¡Œçš„æ—¥å¿—æ–‡ä»¶åã€‚\n\n");
 return -1;  
 }
 if(logfile.Open(argv[3],"a+","false")==false){
 printf("logfile.Open(%s) failed.\n",argv[3]); return -1;
 }
-logfile.Write("crtsurfdata1 ¿ªÊ¼ÔËĞĞ¡£\n");
-//ÕâÀï²åÈëÒµÎñ´úÂë
-logfile.WriteEx("crtsurfdata1 ÔËĞĞ½áÊø¡£\n");
+logfile.Write("crtsurfdata1 å¼€å§‹è¿è¡Œã€‚\n");
+//è¿™é‡Œæ’å…¥ä¸šåŠ¡ä»£ç 
+logfile.WriteEx("crtsurfdata1 è¿è¡Œç»“æŸã€‚\n");
 return 0;
 }
