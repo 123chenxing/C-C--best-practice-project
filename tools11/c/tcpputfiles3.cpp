@@ -1,85 +1,85 @@
 /*
- * ³ÌĞòÃû£ºtcpputfiles.cpp£¬²ÉÓÃtcpĞ­Òé£¬ÊµÏÖÎÄ¼şÉÏ´«µÄ¿Í»§¶Ë¡£
- * ×÷Õß£ºÎâ´ÓÖÜ¡£
+ * ç¨‹åºåï¼štcpputfiles.cppï¼Œé‡‡ç”¨tcpåè®®ï¼Œå®ç°æ–‡ä»¶ä¸Šä¼ çš„å®¢æˆ·ç«¯ã€‚
+ * ä½œè€…ï¼šé™ˆå† ã€‚
 */
 #include "_public.h"
 
-// ³ÌĞòÔËĞĞµÄ²ÎÊı½á¹¹Ìå¡£
+// ç¨‹åºè¿è¡Œçš„å‚æ•°ç»“æ„ä½“ã€‚
 struct st_arg
 {
-  int  clienttype;          // ¿Í»§¶ËÀàĞÍ£¬1-ÉÏ´«ÎÄ¼ş£»2-ÏÂÔØÎÄ¼ş¡£
-  char ip[31];              // ·şÎñ¶ËµÄIPµØÖ·¡£
-  int  port;                // ·şÎñ¶ËµÄ¶Ë¿Ú¡£
-  int  ptype;               // ÎÄ¼şÉÏ´«³É¹¦ºóÎÄ¼şµÄ´¦Àí·½Ê½£º1-É¾³ıÎÄ¼ş£»2-ÒÆ¶¯µ½±¸·İÄ¿Â¼¡£
-  char clientpath[301];     // ±¾µØÎÄ¼ş´æ·ÅµÄ¸ùÄ¿Â¼¡£
-  char clientpathbak[301];  // ÎÄ¼ş³É¹¦ÉÏ´«ºó£¬±¾µØÎÄ¼ş±¸·İµÄ¸ùÄ¿Â¼£¬µ±ptype==2Ê±ÓĞĞ§¡£
-  bool andchild;            // ÊÇ·ñÉÏ´«clientpathÄ¿Â¼ÏÂ¸÷¼¶×ÓÄ¿Â¼µÄÎÄ¼ş£¬true-ÊÇ£»false-·ñ¡£
-  char matchname[301];      // ´ıÉÏ´«ÎÄ¼şÃûµÄÆ¥Åä¹æÔò£¬Èç"*.TXT,*.XML"¡£
-  char srvpath[301];        // ·şÎñ¶ËÎÄ¼ş´æ·ÅµÄ¸ùÄ¿Â¼¡£
-  int  timetvl;             // É¨Ãè±¾µØÄ¿Â¼ÎÄ¼şµÄÊ±¼ä¼ä¸ô£¬µ¥Î»£ºÃë¡£
-  int  timeout;             // ½ø³ÌĞÄÌøµÄ³¬Ê±Ê±¼ä¡£
-  char pname[51];           // ½ø³ÌÃû£¬½¨ÒéÓÃ"tcpputfiles_ºó×º"µÄ·½Ê½¡£
+  int  clienttype;          // å®¢æˆ·ç«¯ç±»å‹ï¼Œ1-ä¸Šä¼ æ–‡ä»¶ï¼›2-ä¸‹è½½æ–‡ä»¶ã€‚
+  char ip[31];              // æœåŠ¡ç«¯çš„IPåœ°å€ã€‚
+  int  port;                // æœåŠ¡ç«¯çš„ç«¯å£ã€‚
+  int  ptype;               // æ–‡ä»¶ä¸Šä¼ æˆåŠŸåæ–‡ä»¶çš„å¤„ç†æ–¹å¼ï¼š1-åˆ é™¤æ–‡ä»¶ï¼›2-ç§»åŠ¨åˆ°å¤‡ä»½ç›®å½•ã€‚
+  char clientpath[301];     // æœ¬åœ°æ–‡ä»¶å­˜æ”¾çš„æ ¹ç›®å½•ã€‚
+  char clientpathbak[301];  // æ–‡ä»¶æˆåŠŸä¸Šä¼ åï¼Œæœ¬åœ°æ–‡ä»¶å¤‡ä»½çš„æ ¹ç›®å½•ï¼Œå½“ptype==2æ—¶æœ‰æ•ˆã€‚
+  bool andchild;            // æ˜¯å¦ä¸Šä¼ clientpathç›®å½•ä¸‹å„çº§å­ç›®å½•çš„æ–‡ä»¶ï¼Œtrue-æ˜¯ï¼›false-å¦ã€‚
+  char matchname[301];      // å¾…ä¸Šä¼ æ–‡ä»¶åçš„åŒ¹é…è§„åˆ™ï¼Œå¦‚"*.TXT,*.XML"ã€‚
+  char srvpath[301];        // æœåŠ¡ç«¯æ–‡ä»¶å­˜æ”¾çš„æ ¹ç›®å½•ã€‚
+  int  timetvl;             // æ‰«ææœ¬åœ°ç›®å½•æ–‡ä»¶çš„æ—¶é—´é—´éš”ï¼Œå•ä½ï¼šç§’ã€‚
+  int  timeout;             // è¿›ç¨‹å¿ƒè·³çš„è¶…æ—¶æ—¶é—´ã€‚
+  char pname[51];           // è¿›ç¨‹åï¼Œå»ºè®®ç”¨"tcpputfiles_åç¼€"çš„æ–¹å¼ã€‚
 } starg;
 
 CLogFile logfile;
 
-// ³ÌĞòÍË³öºÍĞÅºÅ2¡¢15µÄ´¦Àíº¯Êı¡£
+// ç¨‹åºé€€å‡ºå’Œä¿¡å·2ã€15çš„å¤„ç†å‡½æ•°ã€‚
 void EXIT(int sig);
 
 void _help();
 
-// °Ñxml½âÎöµ½²ÎÊıstarg½á¹¹ÖĞ¡£
+// æŠŠxmlè§£æåˆ°å‚æ•°stargç»“æ„ä¸­ã€‚
 bool _xmltoarg(char *strxmlbuffer);
 
 CTcpClient TcpClient;
 
-bool Login(const char *argv);    // µÇÂ¼ÒµÎñ¡£
+bool Login(const char *argv);    // ç™»å½•ä¸šåŠ¡ã€‚
 
-bool ActiveTest();    // ĞÄÌø¡£
+bool ActiveTest();    // å¿ƒè·³ã€‚
 
-char strrecvbuffer[1024];   // ·¢ËÍ±¨ÎÄµÄbuffer¡£
-char strsendbuffer[1024];   // ½ÓÊÕ±¨ÎÄµÄbuffer¡£
+char strrecvbuffer[1024];   // å‘é€æŠ¥æ–‡çš„bufferã€‚
+char strsendbuffer[1024];   // æ¥æ”¶æŠ¥æ–‡çš„bufferã€‚
 
-// ÎÄ¼şÉÏ´«µÄÖ÷º¯Êı£¬Ö´ĞĞÒ»´ÎÎÄ¼şÉÏ´«µÄÈÎÎñ¡£
+// æ–‡ä»¶ä¸Šä¼ çš„ä¸»å‡½æ•°ï¼Œæ‰§è¡Œä¸€æ¬¡æ–‡ä»¶ä¸Šä¼ çš„ä»»åŠ¡ã€‚
 bool _tcpputfiles();
 
-// °ÑÎÄ¼şµÄÄÚÈİ·¢ËÍ¸ø¶Ô¶Ë¡£
+// æŠŠæ–‡ä»¶çš„å†…å®¹å‘é€ç»™å¯¹ç«¯ã€‚
 bool SendFile(const int sockfd,const char *filename,const int filesize);
 
-CPActive PActive;  // ½ø³ÌĞÄÌø¡£
+CPActive PActive;  // è¿›ç¨‹å¿ƒè·³ã€‚
 
 int main(int argc,char *argv[])
 {
   if (argc!=3) { _help(); return -1; }
 
-  // ¹Ø±ÕÈ«²¿µÄĞÅºÅºÍÊäÈëÊä³ö¡£
-  // ÉèÖÃĞÅºÅ,ÔÚshell×´Ì¬ÏÂ¿ÉÓÃ "kill + ½ø³ÌºÅ" Õı³£ÖÕÖ¹Ğ©½ø³Ì¡£
-  // µ«Çë²»ÒªÓÃ "kill -9 +½ø³ÌºÅ" Ç¿ĞĞÖÕÖ¹¡£
+  // å…³é—­å…¨éƒ¨çš„ä¿¡å·å’Œè¾“å…¥è¾“å‡ºã€‚
+  // è®¾ç½®ä¿¡å·,åœ¨shellçŠ¶æ€ä¸‹å¯ç”¨ "kill + è¿›ç¨‹å·" æ­£å¸¸ç»ˆæ­¢äº›è¿›ç¨‹ã€‚
+  // ä½†è¯·ä¸è¦ç”¨ "kill -9 +è¿›ç¨‹å·" å¼ºè¡Œç»ˆæ­¢ã€‚
   CloseIOAndSignal(); signal(SIGINT,EXIT); signal(SIGTERM,EXIT);
 
-  // ´ò¿ªÈÕÖ¾ÎÄ¼ş¡£
+  // æ‰“å¼€æ—¥å¿—æ–‡ä»¶ã€‚
   if (logfile.Open(argv[1],"a+")==false)
   {
-    printf("´ò¿ªÈÕÖ¾ÎÄ¼şÊ§°Ü£¨%s£©¡£\n",argv[1]); return -1;
+    printf("æ‰“å¼€æ—¥å¿—æ–‡ä»¶å¤±è´¥ï¼ˆ%sï¼‰ã€‚\n",argv[1]); return -1;
   }
 
-  // ½âÎöxml£¬µÃµ½³ÌĞòÔËĞĞµÄ²ÎÊı¡£
+  // è§£æxmlï¼Œå¾—åˆ°ç¨‹åºè¿è¡Œçš„å‚æ•°ã€‚
   if (_xmltoarg(argv[2])==false) return -1;
 
-  // PActive.AddPInfo(starg.timeout,starg.pname);  // °Ñ½ø³ÌµÄĞÄÌøĞÅÏ¢Ğ´Èë¹²ÏíÄÚ´æ¡£
+  // PActive.AddPInfo(starg.timeout,starg.pname);  // æŠŠè¿›ç¨‹çš„å¿ƒè·³ä¿¡æ¯å†™å…¥å…±äº«å†…å­˜ã€‚
 
-  // Ïò·şÎñ¶Ë·¢ÆğÁ¬½ÓÇëÇó¡£
+  // å‘æœåŠ¡ç«¯å‘èµ·è¿æ¥è¯·æ±‚ã€‚
   if (TcpClient.ConnectToServer(starg.ip,starg.port)==false)
   {
     logfile.Write("TcpClient.ConnectToServer(%s,%d) failed.\n",starg.ip,starg.port); EXIT(-1);
   }
 
-  // µÇÂ¼ÒµÎñ¡£
+  // ç™»å½•ä¸šåŠ¡ã€‚
   if (Login(argv[2])==false) { logfile.Write("Login() failed.\n"); EXIT(-1); }
 
   while (true)
   {
-    // µ÷ÓÃÎÄ¼şÉÏ´«µÄÖ÷º¯Êı£¬Ö´ĞĞÒ»´ÎÎÄ¼şÉÏ´«µÄÈÎÎñ¡£
+    // è°ƒç”¨æ–‡ä»¶ä¸Šä¼ çš„ä¸»å‡½æ•°ï¼Œæ‰§è¡Œä¸€æ¬¡æ–‡ä»¶ä¸Šä¼ çš„ä»»åŠ¡ã€‚
     if (_tcpputfiles()==false) { logfile.Write("_tcpputfiles() failed.\n"); EXIT(-1); }
 
     sleep(starg.timetvl);
@@ -90,43 +90,43 @@ int main(int argc,char *argv[])
   EXIT(0);
 }
 
-// ĞÄÌø¡£ 
+// å¿ƒè·³ã€‚ 
 bool ActiveTest()    
 {
   memset(strsendbuffer,0,sizeof(strsendbuffer));
   memset(strrecvbuffer,0,sizeof(strrecvbuffer));
  
   SPRINTF(strsendbuffer,sizeof(strsendbuffer),"<activetest>ok</activetest>");
-  // logfile.Write("·¢ËÍ£º%s\n",strsendbuffer);
-  if (TcpClient.Write(strsendbuffer)==false) return false; // Ïò·şÎñ¶Ë·¢ËÍÇëÇó±¨ÎÄ¡£
+  // logfile.Write("å‘é€ï¼š%s\n",strsendbuffer);
+  if (TcpClient.Write(strsendbuffer)==false) return false; // å‘æœåŠ¡ç«¯å‘é€è¯·æ±‚æŠ¥æ–‡ã€‚
 
-  if (TcpClient.Read(strrecvbuffer,20)==false) return false; // ½ÓÊÕ·şÎñ¶ËµÄ»ØÓ¦±¨ÎÄ¡£
-  // logfile.Write("½ÓÊÕ£º%s\n",strrecvbuffer);
+  if (TcpClient.Read(strrecvbuffer,20)==false) return false; // æ¥æ”¶æœåŠ¡ç«¯çš„å›åº”æŠ¥æ–‡ã€‚
+  // logfile.Write("æ¥æ”¶ï¼š%s\n",strrecvbuffer);
 
   return true;
 }
 
-// µÇÂ¼ÒµÎñ¡£ 
+// ç™»å½•ä¸šåŠ¡ã€‚ 
 bool Login(const char *argv)    
 {
   memset(strsendbuffer,0,sizeof(strsendbuffer));
   memset(strrecvbuffer,0,sizeof(strrecvbuffer));
  
   SPRINTF(strsendbuffer,sizeof(strsendbuffer),"%s<clienttype>1</clienttype>",argv);
-  logfile.Write("·¢ËÍ£º%s\n",strsendbuffer);
-  if (TcpClient.Write(strsendbuffer)==false) return false; // Ïò·şÎñ¶Ë·¢ËÍÇëÇó±¨ÎÄ¡£
+  logfile.Write("å‘é€ï¼š%s\n",strsendbuffer);
+  if (TcpClient.Write(strsendbuffer)==false) return false; // å‘æœåŠ¡ç«¯å‘é€è¯·æ±‚æŠ¥æ–‡ã€‚
 
-  if (TcpClient.Read(strrecvbuffer,20)==false) return false; // ½ÓÊÕ·şÎñ¶ËµÄ»ØÓ¦±¨ÎÄ¡£
-  logfile.Write("½ÓÊÕ£º%s\n",strrecvbuffer);
+  if (TcpClient.Read(strrecvbuffer,20)==false) return false; // æ¥æ”¶æœåŠ¡ç«¯çš„å›åº”æŠ¥æ–‡ã€‚
+  logfile.Write("æ¥æ”¶ï¼š%s\n",strrecvbuffer);
 
-  logfile.Write("µÇÂ¼(%s:%d)³É¹¦¡£\n",starg.ip,starg.port); 
+  logfile.Write("ç™»å½•(%s:%d)æˆåŠŸã€‚\n",starg.ip,starg.port); 
 
   return true;
 }
 
 void EXIT(int sig)
 {
-  logfile.Write("³ÌĞòÍË³ö£¬sig=%d\n\n",sig);
+  logfile.Write("ç¨‹åºé€€å‡ºï¼Œsig=%d\n\n",sig);
 
   exit(0);
 }
@@ -134,28 +134,28 @@ void EXIT(int sig)
 void _help()
 {
   printf("\n");
-  printf("Using:/project/tools1/bin/tcpputfiles logfilename xmlbuffer\n\n");
+  printf("Using:/project/tools11/bin/tcpputfiles logfilename xmlbuffer\n\n");
 
-  printf("Sample:/project/tools1/bin/procctl 20 /project/tools1/bin/tcpputfiles /log/idc/tcpputfiles_surfdata.log \"<ip>192.168.174.132</ip><port>5005</port><ptype>1</ptype><clientpath>/tmp/tcp/surfdata1</clientpath><clientpathbak>/tmp/tcp/surfdata1bak</clientpathbak><andchild>true</andchild><matchname>*.XML,*.CSV</matchname><srvpath>/tmp/tcp/surfdata2</srvpath><timetvl>10</timetvl><timeout>50</timeout><pname>tcpputfiles_surfdata</pname>\"\n");
-  printf("       /project/tools1/bin/procctl 20 /project/tools1/bin/tcpputfiles /log/idc/tcpputfiles_surfdata.log \"<ip>192.168.174.132</ip><port>5005</port><ptype>2</ptype><clientpath>/tmp/tcp/surfdata1</clientpath><clientpathbak>/tmp/tcp/surfdata1bak</clientpathbak><andchild>true</andchild><matchname>*.XML,*.CSV</matchname><srvpath>/tmp/tcp/surfdata2</srvpath><timetvl>10</timetvl><timeout>50</timeout><pname>tcpputfiles_surfdata</pname>\"\n\n\n");
+  printf("Sample:/project/tools11/bin/procctl 20 /project/tools11/bin/tcpputfiles /log/idc/tcpputfiles_surfdata.log \"<ip>192.168.244.128</ip><port>5005</port><ptype>1</ptype><clientpath>/tmp/tcp/surfdata1</clientpath><clientpathbak>/tmp/tcp/surfdata1bak</clientpathbak><andchild>true</andchild><matchname>*.XML,*.CSV</matchname><srvpath>/tmp/tcp/surfdata2</srvpath><timetvl>10</timetvl><timeout>50</timeout><pname>tcpputfiles_surfdata</pname>\"\n");
+  printf("       /project/tools11/bin/procctl 20 /project/tools11/bin/tcpputfiles /log/idc/tcpputfiles_surfdata.log \"<ip>192.168.244.128</ip><port>5005</port><ptype>2</ptype><clientpath>/tmp/tcp/surfdata1</clientpath><clientpathbak>/tmp/tcp/surfdata1bak</clientpathbak><andchild>true</andchild><matchname>*.XML,*.CSV</matchname><srvpath>/tmp/tcp/surfdata2</srvpath><timetvl>10</timetvl><timeout>50</timeout><pname>tcpputfiles_surfdata</pname>\"\n\n\n");
 
-  printf("±¾³ÌĞòÊÇÊı¾İÖĞĞÄµÄ¹«¹²¹¦ÄÜÄ£¿é£¬²ÉÓÃtcpĞ­Òé°ÑÎÄ¼ş·¢ËÍ¸ø·şÎñ¶Ë¡£\n");
-  printf("logfilename   ±¾³ÌĞòÔËĞĞµÄÈÕÖ¾ÎÄ¼ş¡£\n");
-  printf("xmlbuffer     ±¾³ÌĞòÔËĞĞµÄ²ÎÊı£¬ÈçÏÂ£º\n");
-  printf("ip            ·şÎñ¶ËµÄIPµØÖ·¡£\n");
-  printf("port          ·şÎñ¶ËµÄ¶Ë¿Ú¡£\n");
-  printf("ptype         ÎÄ¼şÉÏ´«³É¹¦ºóµÄ´¦Àí·½Ê½£º1-É¾³ıÎÄ¼ş£»2-ÒÆ¶¯µ½±¸·İÄ¿Â¼¡£\n");
-  printf("clientpath    ±¾µØÎÄ¼ş´æ·ÅµÄ¸ùÄ¿Â¼¡£\n");
-  printf("clientpathbak ÎÄ¼ş³É¹¦ÉÏ´«ºó£¬±¾µØÎÄ¼ş±¸·İµÄ¸ùÄ¿Â¼£¬µ±ptype==2Ê±ÓĞĞ§¡£\n");
-  printf("andchild      ÊÇ·ñÉÏ´«clientpathÄ¿Â¼ÏÂ¸÷¼¶×ÓÄ¿Â¼µÄÎÄ¼ş£¬true-ÊÇ£»false-·ñ£¬È±Ê¡Îªfalse¡£\n");
-  printf("matchname     ´ıÉÏ´«ÎÄ¼şÃûµÄÆ¥Åä¹æÔò£¬Èç\"*.TXT,*.XML\"\n");
-  printf("srvpath       ·şÎñ¶ËÎÄ¼ş´æ·ÅµÄ¸ùÄ¿Â¼¡£\n");
-  printf("timetvl       É¨Ãè±¾µØÄ¿Â¼ÎÄ¼şµÄÊ±¼ä¼ä¸ô£¬µ¥Î»£ºÃë£¬È¡ÖµÔÚ1-30Ö®¼ä¡£\n");
-  printf("timeout       ±¾³ÌĞòµÄ³¬Ê±Ê±¼ä£¬µ¥Î»£ºÃë£¬ÊÓÎÄ¼ş´óĞ¡ºÍÍøÂç´ø¿í¶ø¶¨£¬½¨ÒéÉèÖÃ50ÒÔÉÏ¡£\n");
-  printf("pname         ½ø³ÌÃû£¬¾¡¿ÉÄÜ²ÉÓÃÒ×¶®µÄ¡¢ÓëÆäËü½ø³Ì²»Í¬µÄÃû³Æ£¬·½±ã¹ÊÕÏÅÅ²é¡£\n\n");
+  printf("æœ¬ç¨‹åºæ˜¯æ•°æ®ä¸­å¿ƒçš„å…¬å…±åŠŸèƒ½æ¨¡å—ï¼Œé‡‡ç”¨tcpåè®®æŠŠæ–‡ä»¶å‘é€ç»™æœåŠ¡ç«¯ã€‚\n");
+  printf("logfilename   æœ¬ç¨‹åºè¿è¡Œçš„æ—¥å¿—æ–‡ä»¶ã€‚\n");
+  printf("xmlbuffer     æœ¬ç¨‹åºè¿è¡Œçš„å‚æ•°ï¼Œå¦‚ä¸‹ï¼š\n");
+  printf("ip            æœåŠ¡ç«¯çš„IPåœ°å€ã€‚\n");
+  printf("port          æœåŠ¡ç«¯çš„ç«¯å£ã€‚\n");
+  printf("ptype         æ–‡ä»¶ä¸Šä¼ æˆåŠŸåçš„å¤„ç†æ–¹å¼ï¼š1-åˆ é™¤æ–‡ä»¶ï¼›2-ç§»åŠ¨åˆ°å¤‡ä»½ç›®å½•ã€‚\n");
+  printf("clientpath    æœ¬åœ°æ–‡ä»¶å­˜æ”¾çš„æ ¹ç›®å½•ã€‚\n");
+  printf("clientpathbak æ–‡ä»¶æˆåŠŸä¸Šä¼ åï¼Œæœ¬åœ°æ–‡ä»¶å¤‡ä»½çš„æ ¹ç›®å½•ï¼Œå½“ptype==2æ—¶æœ‰æ•ˆã€‚\n");
+  printf("andchild      æ˜¯å¦ä¸Šä¼ clientpathç›®å½•ä¸‹å„çº§å­ç›®å½•çš„æ–‡ä»¶ï¼Œtrue-æ˜¯ï¼›false-å¦ï¼Œç¼ºçœä¸ºfalseã€‚\n");
+  printf("matchname     å¾…ä¸Šä¼ æ–‡ä»¶åçš„åŒ¹é…è§„åˆ™ï¼Œå¦‚\"*.TXT,*.XML\"\n");
+  printf("srvpath       æœåŠ¡ç«¯æ–‡ä»¶å­˜æ”¾çš„æ ¹ç›®å½•ã€‚\n");
+  printf("timetvl       æ‰«ææœ¬åœ°ç›®å½•æ–‡ä»¶çš„æ—¶é—´é—´éš”ï¼Œå•ä½ï¼šç§’ï¼Œå–å€¼åœ¨1-30ä¹‹é—´ã€‚\n");
+  printf("timeout       æœ¬ç¨‹åºçš„è¶…æ—¶æ—¶é—´ï¼Œå•ä½ï¼šç§’ï¼Œè§†æ–‡ä»¶å¤§å°å’Œç½‘ç»œå¸¦å®½è€Œå®šï¼Œå»ºè®®è®¾ç½®50ä»¥ä¸Šã€‚\n");
+  printf("pname         è¿›ç¨‹åï¼Œå°½å¯èƒ½é‡‡ç”¨æ˜“æ‡‚çš„ã€ä¸å…¶å®ƒè¿›ç¨‹ä¸åŒçš„åç§°ï¼Œæ–¹ä¾¿æ•…éšœæ’æŸ¥ã€‚\n\n");
 }
 
-// °Ñxml½âÎöµ½²ÎÊıstarg½á¹¹
+// æŠŠxmlè§£æåˆ°å‚æ•°stargç»“æ„
 bool _xmltoarg(char *strxmlbuffer)
 {
   memset(&starg,0,sizeof(struct st_arg));
@@ -186,11 +186,11 @@ bool _xmltoarg(char *strxmlbuffer)
   GetXMLBuffer(strxmlbuffer,"timetvl",&starg.timetvl);
   if (starg.timetvl==0) { logfile.Write("timetvl is null.\n"); return false; }
 
-  // É¨Ãè±¾µØÄ¿Â¼ÎÄ¼şµÄÊ±¼ä¼ä¸ô£¬µ¥Î»£ºÃë¡£
-  // starg.timetvlÃ»ÓĞ±ØÒª³¬¹ı30Ãë¡£
+  // æ‰«ææœ¬åœ°ç›®å½•æ–‡ä»¶çš„æ—¶é—´é—´éš”ï¼Œå•ä½ï¼šç§’ã€‚
+  // starg.timetvlæ²¡æœ‰å¿…è¦è¶…è¿‡30ç§’ã€‚
   if (starg.timetvl>30) starg.timetvl=30;
 
-  // ½ø³ÌĞÄÌøµÄ³¬Ê±Ê±¼ä£¬Ò»¶¨Òª´óÓÚstarg.timetvl£¬Ã»ÓĞ±ØÒªĞ¡ÓÚ50Ãë¡£
+  // è¿›ç¨‹å¿ƒè·³çš„è¶…æ—¶æ—¶é—´ï¼Œä¸€å®šè¦å¤§äºstarg.timetvlï¼Œæ²¡æœ‰å¿…è¦å°äº50ç§’ã€‚
   GetXMLBuffer(strxmlbuffer,"timeout",&starg.timeout);
   if (starg.timeout==0) { logfile.Write("timeout is null.\n"); return false; }
   if (starg.timeout<50) starg.timeout=50;
@@ -201,15 +201,15 @@ bool _xmltoarg(char *strxmlbuffer)
   return true;
 }
 
-// ÎÄ¼şÉÏ´«µÄÖ÷º¯Êı£¬Ö´ĞĞÒ»´ÎÎÄ¼şÉÏ´«µÄÈÎÎñ¡£
+// æ–‡ä»¶ä¸Šä¼ çš„ä¸»å‡½æ•°ï¼Œæ‰§è¡Œä¸€æ¬¡æ–‡ä»¶ä¸Šä¼ çš„ä»»åŠ¡ã€‚
 bool _tcpputfiles()
 {
   CDir Dir;
 
-  // µ÷ÓÃOpenDir()´ò¿ªstarg.clientpathÄ¿Â¼¡£
+  // è°ƒç”¨OpenDir()æ‰“å¼€starg.clientpathç›®å½•ã€‚
   if (Dir.OpenDir(starg.clientpath,starg.matchname,10000,starg.andchild)==false)
   {
-    logfile.Write("Dir.OpenDir(%s) Ê§°Ü¡£\n",starg.clientpath); return false;
+    logfile.Write("Dir.OpenDir(%s) å¤±è´¥ã€‚\n",starg.clientpath); return false;
   }
 
   while (true)
@@ -217,10 +217,10 @@ bool _tcpputfiles()
     memset(strsendbuffer,0,sizeof(strsendbuffer));
     memset(strrecvbuffer,0,sizeof(strrecvbuffer));
 
-    // ±éÀúÄ¿Â¼ÖĞµÄÃ¿¸öÎÄ¼ş£¬µ÷ÓÃReadDir()»ñÈ¡Ò»¸öÎÄ¼şÃû¡£
+    // éå†ç›®å½•ä¸­çš„æ¯ä¸ªæ–‡ä»¶ï¼Œè°ƒç”¨ReadDir()è·å–ä¸€ä¸ªæ–‡ä»¶åã€‚
     if (Dir.ReadDir()==false) break;
 
-    // °ÑÎÄ¼şÃû¡¢ĞŞ¸ÄÊ±¼ä¡¢ÎÄ¼ş´óĞ¡×é³É±¨ÎÄ£¬·¢ËÍ¸ø¶Ô¶Ë¡£
+    // æŠŠæ–‡ä»¶åã€ä¿®æ”¹æ—¶é—´ã€æ–‡ä»¶å¤§å°ç»„æˆæŠ¥æ–‡ï¼Œå‘é€ç»™å¯¹ç«¯ã€‚
     SNPRINTF(strsendbuffer,sizeof(strsendbuffer),1000,"<filename>%s</filename><mtime>%s</mtime><size>%d</size>",Dir.m_FullFileName,Dir.m_ModifyTime,Dir.m_FileSize);
 
     // logfile.Write("strsendbuffer=%s\n",strsendbuffer);
@@ -229,7 +229,7 @@ bool _tcpputfiles()
       logfile.Write("TcpClient.Write() failed.\n"); return false;
     }
 
-    // °ÑÎÄ¼şµÄÄÚÈİ·¢ËÍ¸ø¶Ô¶Ë¡£
+    // æŠŠæ–‡ä»¶çš„å†…å®¹å‘é€ç»™å¯¹ç«¯ã€‚
     logfile.Write("send %s(%d) ...",Dir.m_FullFileName,Dir.m_FileSize);
     if (SendFile(TcpClient.m_connfd,Dir.m_FullFileName,Dir.m_FileSize)==true)
     {
@@ -240,50 +240,50 @@ bool _tcpputfiles()
       logfile.WriteEx("failed.\n"); TcpClient.Close(); return false;
     }
 
-    // ½ÓÊÕ¶Ô¶ËµÄÈ·ÈÏ±¨ÎÄ¡£
+    // æ¥æ”¶å¯¹ç«¯çš„ç¡®è®¤æŠ¥æ–‡ã€‚
     if (TcpClient.Read(strrecvbuffer,20)==false)
     {
       logfile.Write("TcpClient.Read() failed.\n"); return false;
     }
     // logfile.Write("strrecvbuffer=%s\n",strrecvbuffer);
 
-    // É¾³ı»òÕß×ª´æ±¾µØµÄÎÄ¼ş¡£
+    // åˆ é™¤æˆ–è€…è½¬å­˜æœ¬åœ°çš„æ–‡ä»¶ã€‚
   }
 
   return true;
 }
 
 
-// °ÑÎÄ¼şµÄÄÚÈİ·¢ËÍ¸ø¶Ô¶Ë¡£
+// æŠŠæ–‡ä»¶çš„å†…å®¹å‘é€ç»™å¯¹ç«¯ã€‚
 bool SendFile(const int sockfd,const char *filename,const int filesize)
 {
-  int  onread=0;        // Ã¿´Îµ÷ÓÃfreadÊ±´òËã¶ÁÈ¡µÄ×Ö½ÚÊı¡£ 
-  int  bytes=0;         // µ÷ÓÃÒ»´Îfread´ÓÎÄ¼şÖĞ¶ÁÈ¡µÄ×Ö½ÚÊı¡£
-  char buffer[1000];    // ´æ·Å¶ÁÈ¡Êı¾İµÄbuffer¡£
-  int  totalbytes=0;    // ´ÓÎÄ¼şÖĞÒÑ¶ÁÈ¡µÄ×Ö½Ú×ÜÊı¡£
+  int  onread=0;        // æ¯æ¬¡è°ƒç”¨freadæ—¶æ‰“ç®—è¯»å–çš„å­—èŠ‚æ•°ã€‚ 
+  int  bytes=0;         // è°ƒç”¨ä¸€æ¬¡freadä»æ–‡ä»¶ä¸­è¯»å–çš„å­—èŠ‚æ•°ã€‚
+  char buffer[1000];    // å­˜æ”¾è¯»å–æ•°æ®çš„bufferã€‚
+  int  totalbytes=0;    // ä»æ–‡ä»¶ä¸­å·²è¯»å–çš„å­—èŠ‚æ€»æ•°ã€‚
   FILE *fp=NULL;
 
-  // ÒÔ"rb"µÄÄ£Ê½´ò¿ªÎÄ¼ş¡£
+  // ä»¥"rb"çš„æ¨¡å¼æ‰“å¼€æ–‡ä»¶ã€‚
   if ( (fp=fopen(filename,"rb"))==NULL )  return false;
 
   while (true)
   {
     memset(buffer,0,sizeof(buffer));
 
-    // ¼ÆËã±¾´ÎÓ¦¸Ã¶ÁÈ¡µÄ×Ö½ÚÊı£¬Èç¹ûÊ£ÓàµÄÊı¾İ³¬¹ı1000×Ö½Ú£¬¾Í´òËã¶Á1000×Ö½Ú¡£
+    // è®¡ç®—æœ¬æ¬¡åº”è¯¥è¯»å–çš„å­—èŠ‚æ•°ï¼Œå¦‚æœå‰©ä½™çš„æ•°æ®è¶…è¿‡1000å­—èŠ‚ï¼Œå°±æ‰“ç®—è¯»1000å­—èŠ‚ã€‚
     if (filesize-totalbytes>1000) onread=1000;
     else onread=filesize-totalbytes;
 
-    // ´ÓÎÄ¼şÖĞ¶ÁÈ¡Êı¾İ¡£
+    // ä»æ–‡ä»¶ä¸­è¯»å–æ•°æ®ã€‚
     bytes=fread(buffer,1,onread,fp);
 
-    // °Ñ¶ÁÈ¡µ½µÄÊı¾İ·¢ËÍ¸ø¶Ô¶Ë¡£
+    // æŠŠè¯»å–åˆ°çš„æ•°æ®å‘é€ç»™å¯¹ç«¯ã€‚
     if (bytes>0)
     {
       if (Writen(sockfd,buffer,bytes)==false) { fclose(fp); return false; }
     }
 
-    // ¼ÆËãÎÄ¼şÒÑ¶ÁÈ¡µÄ×Ö½Ú×ÜÊı£¬Èç¹ûÎÄ¼şÒÑ¶ÁÍê£¬Ìø³öÑ­»·¡£
+    // è®¡ç®—æ–‡ä»¶å·²è¯»å–çš„å­—èŠ‚æ€»æ•°ï¼Œå¦‚æœæ–‡ä»¶å·²è¯»å®Œï¼Œè·³å‡ºå¾ªç¯ã€‚
     totalbytes=totalbytes+bytes;
 
     if (totalbytes==filesize) break;
