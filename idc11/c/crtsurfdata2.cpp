@@ -1,64 +1,67 @@
-
+/*
+*  ç¨‹åºåï¼šcrtsurfdata2.cpp   æœ¬ç¨‹åºç”¨äºç”Ÿæˆå…¨å›½æ°”è±¡ç«™ç‚¹è§‚æµ‹çš„åˆ†é’Ÿæ•°æ®ã€‚
+*  é™ˆå† ã€‚
+*/
 
 #include "_public.h"
 
-// È«¹úÆøÏóÕ¾µã²ÎÊı½á¹¹Ìå¡£
+// å…¨å›½æ°”è±¡ç«™ç‚¹å‚æ•°ç»“æ„ä½“ã€‚
 struct st_stcode
 {
-  char provname[31]; // Ê¡
-  char obtid[11];    // Õ¾ºÅ
-  char obtname[31];  // Õ¾Ãû
-  double lat;        // Î³¶È
-  double lon;        // ¾­¶È
-  double height;     // º£°Î¸ß¶È
+  char provname[31]; // çœ
+  char obtid[11];    // ç«™å·
+  char obtname[31];  // ç«™å
+  double lat;        // çº¬åº¦
+  double lon;        // ç»åº¦
+  double height;     // æµ·æ‹”é«˜åº¦
 };
 
-// ´æ·ÅÈ«¹úÆøÏóÕ¾µã²ÎÊıµÄÈİÆ÷¡£
+// å­˜æ”¾å…¨å›½æ°”è±¡ç«™ç‚¹å‚æ•°çš„å®¹å™¨ã€‚
 vector<struct st_stcode> vstcode;
 
-// °ÑÕ¾µã²ÎÊıÎÄ¼şÖĞ¼ÓÔØµ½vstcodeÈİÆ÷ÖĞ¡£
+// æŠŠç«™ç‚¹å‚æ•°æ–‡ä»¶ä¸­åŠ è½½åˆ°vstcodeå®¹å™¨ä¸­ã€‚
 bool LoadSTCode(const char *inifile);
 
-CLogFile logfile;    // ÈÕÖ¾Àà¡£
+CLogFile logfile;    // æ—¥å¿—ç±»ã€‚
 
 int main(int argc,char *argv[])
 {
   if (argc!=4) 
   {
-    // Èç¹û²ÎÊı·Ç·¨£¬¸ø³ö°ïÖúÎÄµµ¡£
+    // å¦‚æœå‚æ•°éæ³•ï¼Œç»™å‡ºå¸®åŠ©æ–‡æ¡£ã€‚
     printf("Using:./crtsurfdata2 inifile outpath logfile\n");
     printf("Example:/project/idc11/bin/crtsurfdata2 /project/idc11/ini/stcode.ini /tmp/surfdata /log/idc/crtsurfdata2.log\n\n");
 
-    printf("inifile È«¹úÆøÏóÕ¾µã²ÎÊıÎÄ¼şÃû¡£\n");
-    printf("outpath È«¹úÆøÏóÕ¾µãÊı¾İÎÄ¼ş´æ·ÅµÄÄ¿Â¼¡£\n");
-    printf("logfile ±¾³ÌĞòÔËĞĞµÄÈÕÖ¾ÎÄ¼şÃû¡£\n\n");
+    printf("inifile å…¨å›½æ°”è±¡ç«™ç‚¹å‚æ•°æ–‡ä»¶åã€‚\n");
+    printf("outpath å…¨å›½æ°”è±¡ç«™ç‚¹æ•°æ®æ–‡ä»¶å­˜æ”¾çš„ç›®å½•ã€‚\n");
+    printf("logfile æœ¬ç¨‹åºè¿è¡Œçš„æ—¥å¿—æ–‡ä»¶åã€‚\n\n");
 
     return -1;
   }
 
-  // ´ò¿ª³ÌĞòµÄÈÕÖ¾ÎÄ¼ş¡£
+  // æ‰“å¼€ç¨‹åºçš„æ—¥å¿—æ–‡ä»¶ã€‚
   if (logfile.Open(argv[3],"a+",false)==false)
   {
     printf("logfile.Open(%s) failed.\n",argv[3]); return -1;
   }
 
-  logfile.Write("crtsurfdata2 ¿ªÊ¼ÔËĞĞ¡£\n");
+  logfile.Write("crtsurfdata2 å¼€å§‹è¿è¡Œã€‚\n");
 
-  // °ÑÕ¾µã²ÎÊıÎÄ¼şÖĞ¼ÓÔØµ½vstcodeÈİÆ÷ÖĞ¡£ 
+  // æŠŠç«™ç‚¹å‚æ•°æ–‡ä»¶ä¸­åŠ è½½åˆ°vstcodeå®¹å™¨ä¸­ã€‚ 
   if (LoadSTCode(argv[1])==false) return -1;
 
 
-  logfile.WriteEx("crtsurfdata2 ÔËĞĞ½áÊø¡£\n");
+  logfile.WriteEx("crtsurfdata2 è¿è¡Œç»“æŸã€‚\n");
 
   return 0;
 }
 
-// °ÑÕ¾µã²ÎÊıÎÄ¼şÖĞ¼ÓÔØµ½vstcodeÈİÆ÷ÖĞ¡£ 
+// æŠŠç«™ç‚¹å‚æ•°æ–‡ä»¶ä¸­åŠ è½½åˆ°vstcodeå®¹å™¨ä¸­ã€‚ 
 bool LoadSTCode(const char *inifile)
 {
   CFile File;
 
-  // ´ò¿ªÕ¾µã²ÎÊıÎÄ¼ş¡£
+  // æ‰“å¼€ç«™ç‚¹å‚æ•°æ–‡ä»¶ã€‚
   if (File.Open(inifile,"r")==false)
   {
     logfile.Write("File.Open(%s) failed.\n",inifile); return false;
@@ -72,24 +75,24 @@ bool LoadSTCode(const char *inifile)
 
   while (true)
   {
-    // ´ÓÕ¾µã²ÎÊıÎÄ¼şÖĞ¶ÁÈ¡Ò»ĞĞ£¬Èç¹ûÒÑ¶ÁÈ¡Íê£¬Ìø³öÑ­»·¡£
+    // ä»ç«™ç‚¹å‚æ•°æ–‡ä»¶ä¸­è¯»å–ä¸€è¡Œï¼Œå¦‚æœå·²è¯»å–å®Œï¼Œè·³å‡ºå¾ªç¯ã€‚
     if (File.Fgets(strBuffer,300,true)==false) break;
 
-    // °Ñ¶ÁÈ¡µ½µÄÒ»ĞĞ²ğ·Ö¡£
+    // æŠŠè¯»å–åˆ°çš„ä¸€è¡Œæ‹†åˆ†ã€‚
     CmdStr.SplitToCmd(strBuffer,",",true);
 
-    if (CmdStr.CmdCount()!=6) continue;     // ÈÓµôÎŞĞ§µÄĞĞ¡£
+    if (CmdStr.CmdCount()!=6) continue;     // æ‰”æ‰æ— æ•ˆçš„è¡Œã€‚
 
-    // °ÑÕ¾µã²ÎÊıµÄÃ¿¸öÊı¾İÏî±£´æµ½Õ¾µã²ÎÊı½á¹¹ÌåÖĞ¡£
+    // æŠŠç«™ç‚¹å‚æ•°çš„æ¯ä¸ªæ•°æ®é¡¹ä¿å­˜åˆ°ç«™ç‚¹å‚æ•°ç»“æ„ä½“ä¸­ã€‚
     memset(&stcode,0,sizeof(struct st_stcode));
-    CmdStr.GetValue(0, stcode.provname,30); // Ê¡
-    CmdStr.GetValue(1, stcode.obtid,10);    // Õ¾ºÅ
-    CmdStr.GetValue(2, stcode.obtname,30);  // Õ¾Ãû
-    CmdStr.GetValue(3,&stcode.lat);         // Î³¶È
-    CmdStr.GetValue(4,&stcode.lon);         // ¾­¶È
-    CmdStr.GetValue(5,&stcode.height);      // º£°Î¸ß¶È
+    CmdStr.GetValue(0, stcode.provname,30); // çœ
+    CmdStr.GetValue(1, stcode.obtid,10);    // ç«™å·
+    CmdStr.GetValue(2, stcode.obtname,30);  // ç«™å
+    CmdStr.GetValue(3,&stcode.lat);         // çº¬åº¦
+    CmdStr.GetValue(4,&stcode.lon);         // ç»åº¦
+    CmdStr.GetValue(5,&stcode.height);      // æµ·æ‹”é«˜åº¦
 
-    // °ÑÕ¾µã²ÎÊı½á¹¹Ìå·ÅÈëÕ¾µã²ÎÊıÈİÆ÷¡£
+    // æŠŠç«™ç‚¹å‚æ•°ç»“æ„ä½“æ”¾å…¥ç«™ç‚¹å‚æ•°å®¹å™¨ã€‚
     vstcode.push_back(stcode);
   }
 
