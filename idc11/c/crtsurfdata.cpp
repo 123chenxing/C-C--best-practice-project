@@ -1,108 +1,111 @@
-//Ôö¼ÓÉú³ÉÀúÊ·Êı¾İÎÄ¼şµÄ¹¦ÄÜ£¬ÎªÑ¹ËõÎÄ¼şºÍÇåÀíÎÄ¼şÄ£¿é×¼±¸ÀúÊ·Êı¾İÎÄ¼ş
-//Ôö¼ÓĞÅºÅ´¦Àíº¯Êı£¬´¦Àí2ºÍ15µÄĞÅºÅ
-//½â¾öµ÷ÓÃexitº¯ÊıÍË³öÊ±¾Ö²¿¶ÔÏóÃ»ÓĞµ÷ÓÃÎö¹¹º¯ÊıµÄÎÊÌâ
-//°ÑĞÄÌøĞÅÏ¢Ğ´Èë¹²ÏíÄÚ´æ
+/*
+*   ç¨‹åºåï¼šcrtsurfdata.cpp   æœ¬ç¨‹åºç”¨äºç”Ÿæˆå…¨å›½æ°”è±¡ç«™ç‚¹è§‚æµ‹çš„åˆ†é’Ÿæ•°æ®ã€‚
+*   ä½œè€…ï¼šé™ˆå† ã€‚
+*/
+
 #include "_public.h"
-CPActive PActive;   //½ø³ÌĞÄÌø
-// È«¹úÆøÏóÕ¾µã²ÎÊı½á¹¹Ìå¡£
+
+CPActive PActive;   //è¿›ç¨‹å¿ƒè·³
+
+// å…¨å›½æ°”è±¡ç«™ç‚¹å‚æ•°ç»“æ„ä½“ã€‚
 struct st_stcode
 {
-  char provname[31]; // Ê¡
-  char obtid[11];    // Õ¾ºÅ
-  char obtname[31];  // Õ¾Ãû
-  double lat;        // Î³¶È
-  double lon;        // ¾­¶È
-  double height;     // º£°Î¸ß¶È
+  char provname[31]; // çœ
+  char obtid[11];    // ç«™å·
+  char obtname[31];  // ç«™å
+  double lat;        // çº¬åº¦
+  double lon;        // ç»åº¦
+  double height;     // æµ·æ‹”é«˜åº¦
 };
 
-vector<struct st_stcode> vstcode; // ´æ·ÅÈ«¹úÆøÏóÕ¾µã²ÎÊıµÄÈİÆ÷¡£
+vector<struct st_stcode> vstcode; // å­˜æ”¾å…¨å›½æ°”è±¡ç«™ç‚¹å‚æ•°çš„å®¹å™¨ã€‚
 
-// °ÑÕ¾µã²ÎÊıÎÄ¼şÖĞ¼ÓÔØµ½vstcodeÈİÆ÷ÖĞ¡£
+// æŠŠç«™ç‚¹å‚æ•°æ–‡ä»¶ä¸­åŠ è½½åˆ°vstcodeå®¹å™¨ä¸­ã€‚
 bool LoadSTCode(const char *inifile);
 
-// È«¹úÆøÏóÕ¾µã·ÖÖÓ¹Û²âÊı¾İ½á¹¹
+// å…¨å›½æ°”è±¡ç«™ç‚¹åˆ†é’Ÿè§‚æµ‹æ•°æ®ç»“æ„
 struct st_surfdata
 {
-  char obtid[11];      // Õ¾µã´úÂë¡£
-  char ddatetime[21];  // Êı¾İÊ±¼ä£º¸ñÊ½yyyymmddhh24miss
-  int  t;              // ÆøÎÂ£ºµ¥Î»£¬0.1ÉãÊÏ¶È¡£
-  int  p;              // ÆøÑ¹£º0.1°ÙÅÁ¡£
-  int  u;              // Ïà¶ÔÊª¶È£¬0-100Ö®¼äµÄÖµ¡£
-  int  wd;             // ·çÏò£¬0-360Ö®¼äµÄÖµ¡£
-  int  wf;             // ·çËÙ£ºµ¥Î»0.1m/s
-  int  r;              // ½µÓêÁ¿£º0.1mm¡£
-  int  vis;            // ÄÜ¼û¶È£º0.1Ã×¡£
+  char obtid[11];      // ç«™ç‚¹ä»£ç ã€‚
+  char ddatetime[21];  // æ•°æ®æ—¶é—´ï¼šæ ¼å¼yyyymmddhh24miss
+  int  t;              // æ°”æ¸©ï¼šå•ä½ï¼Œ0.1æ‘„æ°åº¦ã€‚
+  int  p;              // æ°”å‹ï¼š0.1ç™¾å¸•ã€‚
+  int  u;              // ç›¸å¯¹æ¹¿åº¦ï¼Œ0-100ä¹‹é—´çš„å€¼ã€‚
+  int  wd;             // é£å‘ï¼Œ0-360ä¹‹é—´çš„å€¼ã€‚
+  int  wf;             // é£é€Ÿï¼šå•ä½0.1m/s
+  int  r;              // é™é›¨é‡ï¼š0.1mmã€‚
+  int  vis;            // èƒ½è§åº¦ï¼š0.1ç±³ã€‚
 };
 
-vector<struct st_surfdata> vsurfdata;  // ´æ·ÅÈ«¹úÆøÏóÕ¾µã·ÖÖÓ¹Û²âÊı¾İµÄÈİÆ÷
+vector<struct st_surfdata> vsurfdata;  // å­˜æ”¾å…¨å›½æ°”è±¡ç«™ç‚¹åˆ†é’Ÿè§‚æµ‹æ•°æ®çš„å®¹å™¨
 
-char strddatetime[21]; // ¹Û²âÊı¾İµÄÊ±¼ä¡£
+char strddatetime[21]; // è§‚æµ‹æ•°æ®çš„æ—¶é—´ã€‚
 
-// Ä£ÄâÉú³ÉÈ«¹úÆøÏóÕ¾µã·ÖÖÓ¹Û²âÊı¾İ£¬´æ·ÅÔÚvsurfdataÈİÆ÷ÖĞ¡£
+// æ¨¡æ‹Ÿç”Ÿæˆå…¨å›½æ°”è±¡ç«™ç‚¹åˆ†é’Ÿè§‚æµ‹æ•°æ®ï¼Œå­˜æ”¾åœ¨vsurfdataå®¹å™¨ä¸­ã€‚
 void CrtSurfData();
 CFile File;
-// °ÑÈİÆ÷vsurfdataÖĞµÄÈ«¹úÆøÏóÕ¾µã·ÖÖÓ¹Û²âÊı¾İĞ´ÈëÎÄ¼ş¡£
+// æŠŠå®¹å™¨vsurfdataä¸­çš„å…¨å›½æ°”è±¡ç«™ç‚¹åˆ†é’Ÿè§‚æµ‹æ•°æ®å†™å…¥æ–‡ä»¶ã€‚
 bool CrtSurfFile(const char *outpath,const char *datafmt);
 
-CLogFile logfile;    // ÈÕÖ¾Àà¡£
+CLogFile logfile;    // æ—¥å¿—ç±»ã€‚
 
-void EXIT(int sig);   //³ÌĞòÍË³öºÍĞÅºÅ2¡¢15µÄ´¦Àíº¯Êı
+void EXIT(int sig);   //ç¨‹åºé€€å‡ºå’Œä¿¡å·2ã€15çš„å¤„ç†å‡½æ•°
 
 int main(int argc,char *argv[])
 {
   if ((argc!=5) && (argc!=6))
   {
-    // Èç¹û²ÎÊı·Ç·¨£¬¸ø³ö°ïÖúÎÄµµ¡£
+    // å¦‚æœå‚æ•°éæ³•ï¼Œç»™å‡ºå¸®åŠ©æ–‡æ¡£ã€‚
     printf("Using:./crtsurfdata inifile outpath logfile datafmt [datetime]\n");
     printf("Example:/project/idc1/bin/crtsurfdata /project/idc1/ini/stcode.ini /tmp/idc/surfdata /log/idc/crtsurfdata.log xml,json,csv\n");
     printf("Example:/project/idc11/bin/crtsurfdata /project/idc11/ini/stcode.ini /tmp/idc/surfdata /log/idc/crtsurfdata.log xml,json,csv 202209191907\n\n");
 
-    printf("inifile È«¹úÆøÏóÕ¾µã²ÎÊıÎÄ¼şÃû¡£\n");
-    printf("outpath È«¹úÆøÏóÕ¾µãÊı¾İÎÄ¼ş´æ·ÅµÄÄ¿Â¼¡£\n");
-    printf("logfile ±¾³ÌĞòÔËĞĞµÄÈÕÖ¾ÎÄ¼şÃû¡£\n");
-    printf("datafmt Éú³ÉÊı¾İÎÄ¼şµÄ¸ñÊ½£¬Ö§³Öxml¡¢jsonºÍcsvÈıÖÖ¸ñÊ½£¬ÖĞ¼äÓÃ¶ººÅ·Ö¸ô¡£\n\n");
-	printf("datetime ÕâÊÇÒ»¸ö¿ÉÑ¡²ÎÊı£¬±íÊ¾Éú³ÉÖ¸¶¨Ê±¼äµÄÊı¾İºÍÎÄ¼ş¡£\n\n\n");
+    printf("inifile å…¨å›½æ°”è±¡ç«™ç‚¹å‚æ•°æ–‡ä»¶åã€‚\n");
+    printf("outpath å…¨å›½æ°”è±¡ç«™ç‚¹æ•°æ®æ–‡ä»¶å­˜æ”¾çš„ç›®å½•ã€‚\n");
+    printf("logfile æœ¬ç¨‹åºè¿è¡Œçš„æ—¥å¿—æ–‡ä»¶åã€‚\n");
+    printf("datafmt ç”Ÿæˆæ•°æ®æ–‡ä»¶çš„æ ¼å¼ï¼Œæ”¯æŒxmlã€jsonå’Œcsvä¸‰ç§æ ¼å¼ï¼Œä¸­é—´ç”¨é€—å·åˆ†éš”ã€‚\n\n");
+	printf("datetime è¿™æ˜¯ä¸€ä¸ªå¯é€‰å‚æ•°ï¼Œè¡¨ç¤ºç”ŸæˆæŒ‡å®šæ—¶é—´çš„æ•°æ®å’Œæ–‡ä»¶ã€‚\n\n\n");
     return -1;
   }
-//¹Ø±ÕÈ«²¿µÄĞÅºÅºÍÊäÈëÊä³ö
-//ÉèÖÃĞÅºÅ£¬ÔÚshell×´Ì¬ÏÂ¿ÉÓÃ"kill+½ø³ÌºÅ"Õı³£ÖÕÖ¹Ğ©½ø³Ì
-//µ«Çë²»ÒªÓÃ"kill -9 +½ø³ÌºÅ"Ç¿ĞĞÖÕÖ¹
+//å…³é—­å…¨éƒ¨çš„ä¿¡å·å’Œè¾“å…¥è¾“å‡º
+//è®¾ç½®ä¿¡å·ï¼Œåœ¨shellçŠ¶æ€ä¸‹å¯ç”¨"kill+è¿›ç¨‹å·"æ­£å¸¸ç»ˆæ­¢äº›è¿›ç¨‹
+//ä½†è¯·ä¸è¦ç”¨"kill -9 +è¿›ç¨‹å·"å¼ºè¡Œç»ˆæ­¢
 CloseIOAndSignal(true);   signal(SIGINT,EXIT); signal(SIGTERM,EXIT);
-  // ´ò¿ª³ÌĞòµÄÈÕÖ¾ÎÄ¼ş¡£
+  // æ‰“å¼€ç¨‹åºçš„æ—¥å¿—æ–‡ä»¶ã€‚
   if (logfile.Open(argv[3],"a+",false)==false)
   {
      printf("logfile.Open(%s) failed.\n",argv[3]); return -1;
   }
 
-  logfile.Write("crtsurfdata ¿ªÊ¼ÔËĞĞ¡£\n");
+  logfile.Write("crtsurfdata å¼€å§‹è¿è¡Œã€‚\n");
 
 PActive.AddPInfo(20,"crtsurfdata");
 
-  // °ÑÕ¾µã²ÎÊıÎÄ¼şÖĞ¼ÓÔØµ½vstcodeÈİÆ÷ÖĞ¡£ 
+  // æŠŠç«™ç‚¹å‚æ•°æ–‡ä»¶ä¸­åŠ è½½åˆ°vstcodeå®¹å™¨ä¸­ã€‚ 
   if (LoadSTCode(argv[1])==false) return -1;
-  // »ñÈ¡µ±Ç°Ê±¼ä£¬µ±×÷¹Û²âÊ±¼ä¡£
+  // è·å–å½“å‰æ—¶é—´ï¼Œå½“ä½œè§‚æµ‹æ—¶é—´ã€‚
   memset(strddatetime,0,sizeof(strddatetime));
 	if(argc==5)
   LocalTime(strddatetime,"yyyymmddhh24miss");
 else
 	STRCPY(strddatetime,sizeof(strddatetime),argv[5]);
-  // Ä£ÄâÉú³ÉÈ«¹úÆøÏóÕ¾µã·ÖÖÓ¹Û²âÊı¾İ£¬´æ·ÅÔÚvsurfdataÈİÆ÷ÖĞ¡£
+  // æ¨¡æ‹Ÿç”Ÿæˆå…¨å›½æ°”è±¡ç«™ç‚¹åˆ†é’Ÿè§‚æµ‹æ•°æ®ï¼Œå­˜æ”¾åœ¨vsurfdataå®¹å™¨ä¸­ã€‚
   CrtSurfData();
 
-  // °ÑÈİÆ÷vsurfdataÖĞµÄÈ«¹úÆøÏóÕ¾µã·ÖÖÓ¹Û²âÊı¾İĞ´ÈëÎÄ¼ş¡£
+  // æŠŠå®¹å™¨vsurfdataä¸­çš„å…¨å›½æ°”è±¡ç«™ç‚¹åˆ†é’Ÿè§‚æµ‹æ•°æ®å†™å…¥æ–‡ä»¶ã€‚
   if (strstr(argv[4],"xml")!=0) CrtSurfFile(argv[2],"xml");
   if (strstr(argv[4],"json")!=0) CrtSurfFile(argv[2],"json");
   if (strstr(argv[4],"csv")!=0) CrtSurfFile(argv[2],"csv");
 
-  logfile.Write("crtsurfdata ÔËĞĞ½áÊø¡£\n");
+  logfile.Write("crtsurfdata è¿è¡Œç»“æŸã€‚\n");
 
   return 0;
 }
 
-// °ÑÕ¾µã²ÎÊıÎÄ¼şÖĞ¼ÓÔØµ½vstcodeÈİÆ÷ÖĞ¡£ 
+// æŠŠç«™ç‚¹å‚æ•°æ–‡ä»¶ä¸­åŠ è½½åˆ°vstcodeå®¹å™¨ä¸­ã€‚ 
 bool LoadSTCode(const char *inifile)
 {
-  // ´ò¿ªÕ¾µã²ÎÊıÎÄ¼ş¡£
+  // æ‰“å¼€ç«™ç‚¹å‚æ•°æ–‡ä»¶ã€‚
   if (File.Open(inifile,"r")==false)
   {
     logfile.Write("File.Open(%s) failed.\n",inifile); return false;
@@ -116,24 +119,24 @@ bool LoadSTCode(const char *inifile)
 
   while (true)
   {
-    // ´ÓÕ¾µã²ÎÊıÎÄ¼şÖĞ¶ÁÈ¡Ò»ĞĞ£¬Èç¹ûÒÑ¶ÁÈ¡Íê£¬Ìø³öÑ­»·¡£
+    // ä»ç«™ç‚¹å‚æ•°æ–‡ä»¶ä¸­è¯»å–ä¸€è¡Œï¼Œå¦‚æœå·²è¯»å–å®Œï¼Œè·³å‡ºå¾ªç¯ã€‚
     if (File.Fgets(strBuffer,300,true)==false) break;
 
-    // °Ñ¶ÁÈ¡µ½µÄÒ»ĞĞ²ğ·Ö¡£
+    // æŠŠè¯»å–åˆ°çš„ä¸€è¡Œæ‹†åˆ†ã€‚
     CmdStr.SplitToCmd(strBuffer,",",true);
 
-    if (CmdStr.CmdCount()!=6) continue;     // ÈÓµôÎŞĞ§µÄĞĞ¡£
+    if (CmdStr.CmdCount()!=6) continue;     // æ‰”æ‰æ— æ•ˆçš„è¡Œã€‚
 
-    // °ÑÕ¾µã²ÎÊıµÄÃ¿¸öÊı¾İÏî±£´æµ½Õ¾µã²ÎÊı½á¹¹ÌåÖĞ¡£
+    // æŠŠç«™ç‚¹å‚æ•°çš„æ¯ä¸ªæ•°æ®é¡¹ä¿å­˜åˆ°ç«™ç‚¹å‚æ•°ç»“æ„ä½“ä¸­ã€‚
     memset(&stcode,0,sizeof(struct st_stcode));
-    CmdStr.GetValue(0, stcode.provname,30); // Ê¡
-    CmdStr.GetValue(1, stcode.obtid,10);    // Õ¾ºÅ
-    CmdStr.GetValue(2, stcode.obtname,30);  // Õ¾Ãû
-    CmdStr.GetValue(3,&stcode.lat);         // Î³¶È
-    CmdStr.GetValue(4,&stcode.lon);         // ¾­¶È
-    CmdStr.GetValue(5,&stcode.height);      // º£°Î¸ß¶È
+    CmdStr.GetValue(0, stcode.provname,30); // çœ
+    CmdStr.GetValue(1, stcode.obtid,10);    // ç«™å·
+    CmdStr.GetValue(2, stcode.obtname,30);  // ç«™å
+    CmdStr.GetValue(3,&stcode.lat);         // çº¬åº¦
+    CmdStr.GetValue(4,&stcode.lon);         // ç»åº¦
+    CmdStr.GetValue(5,&stcode.height);      // æµ·æ‹”é«˜åº¦
 
-    // °ÑÕ¾µã²ÎÊı½á¹¹Ìå·ÅÈëÕ¾µã²ÎÊıÈİÆ÷¡£
+    // æŠŠç«™ç‚¹å‚æ•°ç»“æ„ä½“æ”¾å…¥ç«™ç‚¹å‚æ•°å®¹å™¨ã€‚
     vstcode.push_back(stcode);
   }
 
@@ -147,56 +150,56 @@ bool LoadSTCode(const char *inifile)
   return true;
 }
 
-// Ä£ÄâÉú³ÉÈ«¹úÆøÏóÕ¾µã·ÖÖÓ¹Û²âÊı¾İ£¬´æ·ÅÔÚvsurfdataÈİÆ÷ÖĞ¡£
+// æ¨¡æ‹Ÿç”Ÿæˆå…¨å›½æ°”è±¡ç«™ç‚¹åˆ†é’Ÿè§‚æµ‹æ•°æ®ï¼Œå­˜æ”¾åœ¨vsurfdataå®¹å™¨ä¸­ã€‚
 void CrtSurfData()
 {
-  // ²¥Ëæ»úÊıÖÖ×Ó¡£
+  // æ’­éšæœºæ•°ç§å­ã€‚
   srand(time(0));
   struct st_surfdata stsurfdata;
 
-  // ±éÀúÆøÏóÕ¾µã²ÎÊıµÄvstcodeÈİÆ÷¡£
+  // éå†æ°”è±¡ç«™ç‚¹å‚æ•°çš„vstcodeå®¹å™¨ã€‚
   for (int ii=0;ii<vstcode.size();ii++)
   {
     memset(&stsurfdata,0,sizeof(struct st_surfdata));
 
-    // ÓÃËæ»úÊıÌî³ä·ÖÖÓ¹Û²âÊı¾İµÄ½á¹¹Ìå¡£
-    strncpy(stsurfdata.obtid,vstcode[ii].obtid,10); // Õ¾µã´úÂë¡£
-    strncpy(stsurfdata.ddatetime,strddatetime,14);  // Êı¾İÊ±¼ä£º¸ñÊ½yyyymmddhh24miss
-    stsurfdata.t=rand()%351;       // ÆøÎÂ£ºµ¥Î»£¬0.1ÉãÊÏ¶È
-    stsurfdata.p=rand()%265+10000; // ÆøÑ¹£º0.1°ÙÅÁ
-    stsurfdata.u=rand()%100+1;     // Ïà¶ÔÊª¶È£¬0-100Ö®¼äµÄÖµ¡£
-    stsurfdata.wd=rand()%360;      // ·çÏò£¬0-360Ö®¼äµÄÖµ¡£
-    stsurfdata.wf=rand()%150;      // ·çËÙ£ºµ¥Î»0.1m/s
-    stsurfdata.r=rand()%16;        // ½µÓêÁ¿£º0.1mm
-    stsurfdata.vis=rand()%5001+100000;  // ÄÜ¼û¶È£º0.1Ã×
+    // ç”¨éšæœºæ•°å¡«å……åˆ†é’Ÿè§‚æµ‹æ•°æ®çš„ç»“æ„ä½“ã€‚
+    strncpy(stsurfdata.obtid,vstcode[ii].obtid,10); // ç«™ç‚¹ä»£ç ã€‚
+    strncpy(stsurfdata.ddatetime,strddatetime,14);  // æ•°æ®æ—¶é—´ï¼šæ ¼å¼yyyymmddhh24miss
+    stsurfdata.t=rand()%351;       // æ°”æ¸©ï¼šå•ä½ï¼Œ0.1æ‘„æ°åº¦
+    stsurfdata.p=rand()%265+10000; // æ°”å‹ï¼š0.1ç™¾å¸•
+    stsurfdata.u=rand()%100+1;     // ç›¸å¯¹æ¹¿åº¦ï¼Œ0-100ä¹‹é—´çš„å€¼ã€‚
+    stsurfdata.wd=rand()%360;      // é£å‘ï¼Œ0-360ä¹‹é—´çš„å€¼ã€‚
+    stsurfdata.wf=rand()%150;      // é£é€Ÿï¼šå•ä½0.1m/s
+    stsurfdata.r=rand()%16;        // é™é›¨é‡ï¼š0.1mm
+    stsurfdata.vis=rand()%5001+100000;  // èƒ½è§åº¦ï¼š0.1ç±³
 
-    // °Ñ¹Û²âÊı¾İµÄ½á¹¹Ìå·ÅÈëvsurfdataÈİÆ÷¡£
+    // æŠŠè§‚æµ‹æ•°æ®çš„ç»“æ„ä½“æ”¾å…¥vsurfdataå®¹å™¨ã€‚
     vsurfdata.push_back(stsurfdata);
   }
 }
 
-// °ÑÈİÆ÷vsurfdataÖĞµÄÈ«¹úÆøÏóÕ¾µã·ÖÖÓ¹Û²âÊı¾İĞ´ÈëÎÄ¼ş¡£
+// æŠŠå®¹å™¨vsurfdataä¸­çš„å…¨å›½æ°”è±¡ç«™ç‚¹åˆ†é’Ÿè§‚æµ‹æ•°æ®å†™å…¥æ–‡ä»¶ã€‚
 bool CrtSurfFile(const char *outpath,const char *datafmt)
 {
 
-  // Æ´½ÓÉú³ÉÊı¾İµÄÎÄ¼şÃû£¬ÀıÈç£º/tmp/idc/surfdata/SURF_ZH_20210629092200_2254.csv
+  // æ‹¼æ¥ç”Ÿæˆæ•°æ®çš„æ–‡ä»¶åï¼Œä¾‹å¦‚ï¼š/tmp/idc/surfdata/SURF_ZH_20210629092200_2254.csv
   char strFileName[301];
   sprintf(strFileName,"%s/SURF_ZH_%s_%d.%s",outpath,strddatetime,getpid(),datafmt);
 
-  // ´ò¿ªÎÄ¼ş¡£
+  // æ‰“å¼€æ–‡ä»¶ã€‚
   if (File.OpenForRename(strFileName,"w")==false)
   {
     logfile.Write("File.OpenForRename(%s) failed.\n",strFileName); return false;
   }
 
-  if (strcmp(datafmt,"csv")==0) File.Fprintf("Õ¾µã´úÂë,Êı¾İÊ±¼ä,ÆøÎÂ,ÆøÑ¹,Ïà¶ÔÊª¶È,·çÏò,·çËÙ,½µÓêÁ¿,ÄÜ¼û¶È\n");
+  if (strcmp(datafmt,"csv")==0) File.Fprintf("ç«™ç‚¹ä»£ç ,æ•°æ®æ—¶é—´,æ°”æ¸©,æ°”å‹,ç›¸å¯¹æ¹¿åº¦,é£å‘,é£é€Ÿ,é™é›¨é‡,èƒ½è§åº¦\n");
   if (strcmp(datafmt,"xml")==0) File.Fprintf("<data>\n");
   if (strcmp(datafmt,"json")==0) File.Fprintf("{\"data\":[\n");
 
-  // ±éÀú´æ·Å¹Û²âÊı¾İµÄvsurfdataÈİÆ÷¡£
+  // éå†å­˜æ”¾è§‚æµ‹æ•°æ®çš„vsurfdataå®¹å™¨ã€‚
   for (int ii=0;ii<vsurfdata.size();ii++)
   {
-    // Ğ´ÈëÒ»Ìõ¼ÇÂ¼¡£
+    // å†™å…¥ä¸€æ¡è®°å½•ã€‚
     if (strcmp(datafmt,"csv")==0)
       File.Fprintf("%s,%s,%.1f,%.1f,%d,%d,%.1f,%.1f,%.1f\n",\
          vsurfdata[ii].obtid,vsurfdata[ii].ddatetime,vsurfdata[ii].t/10.0,vsurfdata[ii].p/10.0,\
@@ -216,7 +219,7 @@ bool CrtSurfFile(const char *outpath,const char *datafmt)
          vsurfdata[ii].u,vsurfdata[ii].wd,vsurfdata[ii].wf/10.0,vsurfdata[ii].r/10.0,vsurfdata[ii].vis/10.0);
     if (ii<vsurfdata.size()-1) File.Fprintf(",\n");
     else   File.Fprintf("\n");
-    // ÒÔÉÏ¼¸ĞĞ´úÂëÓĞbug£¬Ó¦¸ÃĞŞÕıÈçÏÂ£º
+    // ä»¥ä¸Šå‡ è¡Œä»£ç æœ‰bugï¼Œåº”è¯¥ä¿®æ­£å¦‚ä¸‹ï¼š
     /*
     if (strcmp(datafmt,"json")==0)
     
@@ -234,15 +237,15 @@ bool CrtSurfFile(const char *outpath,const char *datafmt)
 
   if (strcmp(datafmt,"xml")==0) File.Fprintf("</data>\n");
   if (strcmp(datafmt,"json")==0) File.Fprintf("]}\n");
-  // ¹Ø±ÕÎÄ¼ş¡£
+  // å…³é—­æ–‡ä»¶ã€‚
   File.CloseAndRename();
-	UTime(strFileName,strddatetime);    //ĞŞ¸ÄÎÄ¼şµÄÊ±¼äÊôĞÔ
-  logfile.Write("Éú³ÉÊı¾İÎÄ¼ş%s³É¹¦£¬Êı¾İÊ±¼ä%s£¬¼ÇÂ¼Êı%d¡£\n",strFileName,strddatetime,vsurfdata.size());
+	UTime(strFileName,strddatetime);    //ä¿®æ”¹æ–‡ä»¶çš„æ—¶é—´å±æ€§
+  logfile.Write("ç”Ÿæˆæ•°æ®æ–‡ä»¶%sæˆåŠŸï¼Œæ•°æ®æ—¶é—´%sï¼Œè®°å½•æ•°%dã€‚\n",strFileName,strddatetime,vsurfdata.size());
 
   return true;
 }
-//³ÌĞòÍË³öºÍĞÅºÅ2¡¢15µÄ´¦Àíº¯Êı
+//ç¨‹åºé€€å‡ºå’Œä¿¡å·2ã€15çš„å¤„ç†å‡½æ•°
 void EXIT(int sig){
-logfile.Write("³ÌĞòÍË³ö£¬sig=%d\n\n",sig);
+logfile.Write("ç¨‹åºé€€å‡ºï¼Œsig=%d\n\n",sig);
 exit(0);
 }
