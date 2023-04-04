@@ -57,7 +57,7 @@ int main(int argc,char *argv[])
   {
     // 如果参数非法，给出帮助文档。
     printf("Using:./crtsurfdata inifile outpath logfile datafmt [datetime]\n");
-    printf("Example:/project/idc1/bin/crtsurfdata /project/idc1/ini/stcode.ini /tmp/idc/surfdata /log/idc/crtsurfdata.log xml,json,csv\n");
+    printf("Example:/project/idc11/bin/crtsurfdata /project/idc11/ini/stcode.ini /tmp/idc/surfdata /log/idc/crtsurfdata.log xml,json,csv\n");
     printf("Example:/project/idc11/bin/crtsurfdata /project/idc11/ini/stcode.ini /tmp/idc/surfdata /log/idc/crtsurfdata.log xml,json,csv 202209191907\n\n");
 
     printf("inifile 全国气象站点参数文件名。\n");
